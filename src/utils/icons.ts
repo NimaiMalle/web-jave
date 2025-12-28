@@ -37,15 +37,6 @@ export const TOOL_HOTKEYS: Record<string, string> = {
   'Marquee': 'M'
 };
 
-// Action hotkeys (for reference in tooltips)
-export const ACTION_HOTKEYS: Record<string, string> = {
-  'new': '⌘N',
-  'save': '⌘S',
-  'load': '⌘O',
-  'undo': '⌘Z',
-  'redo': '⌘⇧Z'
-};
-
 export async function loadIcon(name: string): Promise<string> {
   if (iconCache.has(name)) {
     return iconCache.get(name)!;

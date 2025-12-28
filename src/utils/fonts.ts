@@ -57,10 +57,3 @@ export async function loadFont(fontFamily: string, fontSize: number): Promise<bo
     return false;
   }
 }
-
-/**
- * Check if a font is available without attempting to load it
- */
-export function isFontAvailable(fontFamily: string, fontSize: number): boolean {
-  return document.fonts.check(`${fontSize}px "${fontFamily}"`);
-}

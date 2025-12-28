@@ -1,10 +1,6 @@
 import type { Document } from '../core/Document.js';
 import type { GlyphLibrary } from 'drascii';
 
-export interface MagnifierConfig {
-  maxOffset: number;
-}
-
 export class MagnifierPanel {
   private panel: HTMLElement;
   private canvas: HTMLCanvasElement;

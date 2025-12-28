@@ -31,28 +31,6 @@ export function* bresenhamLine(
   }
 }
 
-// Draw line to ImageData (1px, grayscale)
-export function drawLine(
-  imageData: ImageData,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  color: number
-): void {
-  const { width, height, data } = imageData;
-
-  for (const { x, y } of bresenhamLine(x0, y0, x1, y1)) {
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-      const idx = (y * width + x) * 4;
-      data[idx] = color;
-      data[idx + 1] = color;
-      data[idx + 2] = color;
-      data[idx + 3] = 255;
-    }
-  }
-}
-
 // Rectangle outline (1px stroke)
 export function* rectangleOutline(
   x0: number,
@@ -80,28 +58,6 @@ export function* rectangleOutline(
   // Left edge (skip both corners)
   for (let y = maxY - 1; y > minY; y--) {
     yield { x: minX, y };
-  }
-}
-
-// Draw rectangle outline to ImageData
-export function drawRectangle(
-  imageData: ImageData,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  color: number
-): void {
-  const { width, height, data } = imageData;
-
-  for (const { x, y } of rectangleOutline(x0, y0, x1, y1)) {
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-      const idx = (y * width + x) * 4;
-      data[idx] = color;
-      data[idx + 1] = color;
-      data[idx + 2] = color;
-      data[idx + 3] = 255;
-    }
   }
 }
 
@@ -226,33 +182,6 @@ export function* ellipseOutline(
   }
 }
 
-// Draw ellipse outline to ImageData
-export function drawEllipse(
-  imageData: ImageData,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  color: number
-): void {
-  const { width, height, data } = imageData;
-  const drawnPixels = new Set<string>();
-
-  for (const { x, y } of ellipseOutline(x0, y0, x1, y1)) {
-    const key = `${x},${y}`;
-    if (drawnPixels.has(key)) continue;
-    drawnPixels.add(key);
-
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-      const idx = (y * width + x) * 4;
-      data[idx] = color;
-      data[idx + 1] = color;
-      data[idx + 2] = color;
-      data[idx + 3] = 255;
-    }
-  }
-}
-
 // Set a single pixel
 export function setPixel(
   imageData: ImageData,
@@ -301,32 +230,4 @@ export function eraseCell(
       setPixel(imageData, x, y, bgColor);
     }
   }
-}
-
-// Clone ImageData
-export function cloneImageData(imageData: ImageData): ImageData {
-  return new ImageData(
-    new Uint8ClampedArray(imageData.data),
-    imageData.width,
-    imageData.height
-  );
-}
-
-// Composite two ImageData (preview over base)
-export function compositeImageData(
-  base: ImageData,
-  overlay: ImageData
-): ImageData {
-  const result = cloneImageData(base);
-  const data = result.data;
-  const overlayData = overlay.data;
-
-  for (let i = 0; i < data.length; i += 4) {
-    // Simple max composite for ink
-    data[i] = Math.max(data[i]!, overlayData[i]!);
-    data[i + 1] = Math.max(data[i + 1]!, overlayData[i + 1]!);
-    data[i + 2] = Math.max(data[i + 2]!, overlayData[i + 2]!);
-  }
-
-  return result;
 }

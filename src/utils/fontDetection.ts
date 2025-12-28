@@ -81,11 +81,6 @@ function getAspectRatioLabel(width: number, height: number): string {
   return `1:${rounded.toFixed(1)}`;
 }
 
-export interface DetectedFont {
-  name: string;
-  available: boolean;
-}
-
 // Detect all available monospace fonts
 export function detectAvailableFonts(): string[] {
   const available: string[] = [];

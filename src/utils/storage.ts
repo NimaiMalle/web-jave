@@ -325,16 +325,6 @@ export async function loadAutosave(): Promise<{
   }
 }
 
-// Check if autosave exists
-export function hasAutosave(): boolean {
-  return localStorage.getItem(AUTOSAVE_KEY) !== null;
-}
-
-// Clear autosave
-export function clearAutosave(): void {
-  localStorage.removeItem(AUTOSAVE_KEY);
-}
-
 // Load PNG from base64 data URL
 async function loadBase64Png(dataUrl: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {

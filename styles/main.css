@@ -278,6 +278,12 @@ html, body {
   background: var(--button-hover);
 }
 
+.dropdown-menu .menu-separator {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
 /* Form field spacing */
 .form-field {
   margin-bottom: 12px;

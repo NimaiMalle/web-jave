@@ -1,120 +1,121 @@
-# Agent Instructions
+# Web ASCII Art Editor (web-jave)
 
-> Copy this file to your project as `AGENTS.md` or append to your existing `CLAUDE.md`
+A web application for drawing ASCII art using a pixel canvas that converts to ASCII characters in real-time using the `drascii` npm package.
 
-## Nucleo Icons CLI
+## Architecture
 
-This project has access to the [Nucleo](https://nucleoapp.com/) icon library (51,000+ icons) via the `nucleo` CLI.
+### Three-Layer Model
 
-### Quick Reference
-
-```bash
-# Search for icons - searches names, tags, sets, and styles automatically
-nucleo search "arrow"
-nucleo search "download"
-nucleo search "arcade game"        # finds game icons in Nucleo Arcade
-nucleo search "flags usa"          # finds USA flag in Nucleo Flags
-
-# Exclude terms with - prefix
-nucleo search "arrow -circle"      # arrows without "circle"
-nucleo search "user -avatar"       # users without "avatar"
-
-# Show all style variants with paths (for copying specific variant)
-nucleo search "download" --expand
-
-# Copy an icon SVG to the project
-nucleo copy "arrow-right" ./src/assets/icons
-nucleo copy "download" ./public/icons --output download-icon.svg
-
-# Copy specific style variant (important when icon exists in multiple styles!)
-nucleo copy "download" --group arcade ./icons    # get Arcade version
-nucleo copy "download" --group ui ./icons        # get UI version
-nucleo copy "download" --group "micro bold"      # get Micro Bold version
-
-# Copy by exact icon ID (from search --expand)
-nucleo copy --id 315 ./icons
-
-# Customize colors for theming / dark mode
-nucleo copy "download" --group arcade --color "#ffffff"       # white for dark mode
-nucleo copy "download" --group arcade --color currentColor    # CSS-controlled
-nucleo copy "download" --color "#3B82F6" --secondary "#93C5FD"  # custom duotone
-
-# Export as PNG (transparent background)
-nucleo copy "download" --png                  # 64x64 PNG
-nucleo copy "download" --png --size 128       # 128x128 PNG
-
-# Output to stdout (for piping or inline use)
-nucleo copy "download" --stdout               # SVG to stdout
-nucleo copy "download" --png --stdout         # PNG to stdout
-
-# Preview an icon in the terminal
-nucleo preview "arrow-right"
-
-# List all icon sets and style groups
-nucleo sets
-nucleo sets --groups
-
-# Interactive browser (if user wants to explore)
-nucleo browse
-
-# Fuzzy search with fzf (if installed)
-nucleo fzf --query "arrow"
+```
+┌─────────────────────────────────────────┐
+│           Display Canvas                │  ← What user sees (composite render)
+├─────────────────────────────────────────┤
+│  Text Layer (priority)                  │  ← User-typed characters (sparse)
+│  Glyph Layer (derived)                  │  ← ASCII from pixel conversion
+│  Pixel Canvas (source)                  │  ← 8-bit grayscale drawing surface
+└─────────────────────────────────────────┘
 ```
 
-### Workflow
+1. **Pixel Canvas** - 8-bit grayscale `ImageData`, drawing tools operate here
+2. **Glyph Layer** - Derived from Pixel Canvas via drascii, stores `{char, flipX, flipY}` per cell
+3. **Text Layer** - Sparse map of user-typed characters, takes priority over Glyph Layer
 
-When the user asks for icons:
+## Project Structure
 
-1. **Search** for relevant icons (results are clustered by name, ranked by relevance):
-   ```bash
-   nucleo search "shopping cart"
-   ```
-   Output shows unique icons with available styles:
-   ```
-   cart
-     Styles: Nucleo UI, Nucleo Core, Nucleo Micro Bold
-     Tags: shopping, cart, buy, purchase, ...
-   ```
+```
+web-jave/
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── src/
+│   ├── main.ts                 # Entry point
+│   ├── App.ts                  # Main application class
+│   ├── types.ts                # Shared TypeScript interfaces
+│   │
+│   ├── core/
+│   │   ├── Document.ts         # Document model and state
+│   │   ├── UndoBuffer.ts       # Undo/redo stack management
+│   │   ├── GlyphProcessor.ts   # drascii integration, debounced conversion
+│   │   └── Renderer.ts         # Canvas rendering (all layers → display)
+│   │
+│   ├── tools/
+│   │   ├── Tool.ts             # Base tool interface
+│   │   ├── PencilTool.ts       # Freehand drawing
+│   │   ├── LineTool.ts         # Click-drag lines
+│   │   ├── RectangleTool.ts    # Rectangle outlines
+│   │   ├── OvalTool.ts         # Oval/ellipse outlines
+│   │   ├── EraserTool.ts       # 3x3 or cell-erase modes
+│   │   ├── TextTool.ts         # Character input, cursor management
+│   │   └── MarqueeTool.ts      # Rectangular selection
+│   │
+│   ├── ui/
+│   │   ├── Dialog.ts           # Modal dialog utilities
+│   │   ├── NewDocumentDialog.ts # Document creation form
+│   │   ├── SettingsPanel.ts    # Conversion settings panel
+│   │   └── MagnifierPanel.ts   # Pixel inspection loupe
+│   │
+│   └── utils/
+│       ├── geometry.ts         # Line, rect, oval algorithms
+│       ├── storage.ts          # Save/Load PNG + metadata, autosave
+│       ├── settings.ts         # User settings persistence
+│       ├── fonts.ts            # Google Fonts loading
+│       ├── fontDetection.ts    # System font detection
+│       └── icons.ts            # Icon loading utilities
+│
+└── styles/
+    └── main.css
+```
 
-2. **Preview** to verify it's the right one (optional):
-   ```bash
-   nucleo preview "cart"
-   ```
+## Key Features
 
-3. **Copy** to the project:
-   ```bash
-   nucleo copy "cart" ./src/assets/icons
-   ```
+- **Drawing Tools**: Pencil, Line, Rectangle, Oval with real-time ASCII preview
+- **Eraser**: 3×3 pixel erase (default) or Alt+click for full cell erase
+- **Text Tool**: Direct character input with cursor, Enter for next row
+- **Marquee Selection**: Select regions, Cmd/Ctrl+C to copy as text
+- **Undo/Redo**: Full history with Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z
+- **Magnifier Panel**: Pixel-level inspection with pin support
+- **Settings Panel**: Adjust max offset, allowed charset, live preview
+- **File Operations**: Save/Load as PNG with metadata sidecar, Export as JSON
+- **Autosave**: Automatic saving to localStorage
 
-4. **Import** in code:
-   ```tsx
-   // React example
-   import CartIcon from './assets/icons/cart.svg';
-   ```
+## Keyboard Shortcuts
 
-### Search Tips
+### Tools
+- `P` - Pencil
+- `L` - Line
+- `R` - Rectangle
+- `O` - Oval
+- `E` - Eraser
+- `T` - Text
+- `M` - Marquee
 
-- **Natural language works**: Search "arcade recycle" finds trash icons in Nucleo Arcade
-- **Negation**: Use `-term` to exclude (e.g., `arrow -bold -circle`)
-- **Multi-word**: All terms must match somewhere (e.g., `credit card` finds credit-card icon)
-- **Style filtering**: Include style name in query (e.g., `micro bold arrow`) or use `--group` flag
+### Actions
+- `Cmd/Ctrl+Z` - Undo
+- `Cmd/Ctrl+Shift+Z` or `Cmd/Ctrl+Y` - Redo
+- `Cmd/Ctrl+N` - New Document
+- `Cmd/Ctrl+S` - Save
+- `Cmd/Ctrl+O` - Open
+- `Cmd/Ctrl+A` - Select All
+- `Cmd/Ctrl+C` - Copy selection as text
+- `Cmd/Ctrl+0` - Center canvas (or browser zoom reset if already centered)
+- `Home` or `0` - Center canvas
+- `Escape` - Clear selection / Exit text input mode
 
-### Icon Styles
+### Drawing Modifiers
+- `Alt+click` - Snap to cell center
+- `Shift` (with Line tool) - Constrain to 45° angles
 
-Nucleo has different style families - ask the user which they prefer if unclear:
+## Development
 
-| Style | Best For | Example Query |
-|-------|----------|---------------|
-| Nucleo UI | Small UI elements (12-18px) | `nucleo search "ui arrow"` |
-| Nucleo Core | Medium/large display (24-48px) | `nucleo search "core download"` |
-| Nucleo Micro Bold | Tiny with bold strokes (20px) | `nucleo search "micro bold user"` |
+```bash
+npm install
+npm run dev     # Start dev server on port 3000
+npm run build   # Build for production
+```
 
-Plus specialty collections: Arcade, Credit Cards, Flags, Social Media, and more.
+## Dependencies
 
-### Tips
-
-- Icon names are kebab-case: `arrow-right`, `shopping-cart`, `user-circle`
-- Default limit is 20 results; use `--limit` to adjust
-- Use `--expand` to see all style variants with file paths
-- The `nucleo copy` command creates the destination directory if needed
-- SVG files can be used directly or converted to React/Vue components
+- `drascii` - ASCII art conversion library (local package at `../drascii`)
+- `vite` - Build tool and dev server
+- `typescript` - Type checking

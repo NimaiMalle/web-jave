@@ -2,6 +2,10 @@
 
 A web application for drawing ASCII art using a pixel canvas that converts to ASCII characters in real-time using the `drascii` npm package.
 
+## Background
+
+This is a **clean-room implementation** inspired by [JAVE](http://www.jave.de/) (Java ASCII Versatile Editor), a classic ASCII art editor from the early 2000s. The original JAVE source code has not been located, so this project was built from scratch based on the general concept of pixel-to-ASCII conversion and observation of JAVE's features. No code was derived from or based on the original JAVE implementation.
+
 ## Architecture
 
 ### Three-Layer Model

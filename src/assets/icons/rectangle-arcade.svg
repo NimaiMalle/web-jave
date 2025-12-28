@@ -1,0 +1,62 @@
+<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" class="nc-icon-wrapper" stroke="currentColor" stroke-width="4" stroke-linecap="square">
+    <!-- Top edge -->
+    <path d="M7 7V6.99" stroke-opacity="1"/>
+    <path d="M11 7V6.99" stroke-opacity="1"/>
+    <path d="M15 7V6.99" stroke-opacity="1"/>
+    <path d="M19 7V6.99" stroke-opacity="1"/>
+    <path d="M23 7V6.99" stroke-opacity="1"/>
+
+    <!-- Bottom edge -->
+    <path d="M7 23V22.99" stroke-opacity="1"/>
+    <path d="M11 23V22.99" stroke-opacity="1"/>
+    <path d="M15 23V22.99" stroke-opacity="1"/>
+    <path d="M19 23V22.99" stroke-opacity="1"/>
+    <path d="M23 23V22.99" stroke-opacity="1"/>
+
+    <!-- Left edge -->
+    <path d="M7 11V10.99" stroke-opacity="1"/>
+    <path d="M7 15V14.99" stroke-opacity="1"/>
+    <path d="M7 19V18.99" stroke-opacity="1"/>
+
+    <!-- Right edge -->
+    <path d="M23 11V10.99" stroke-opacity="1"/>
+    <path d="M23 15V14.99" stroke-opacity="1"/>
+    <path d="M23 19V18.99" stroke-opacity="1"/>
+
+    <!-- Background grid (invisible) -->
+    <path d="M3 3V2.99" stroke-opacity=".01"/>
+    <path d="M3 7V6.99" stroke-opacity=".01"/>
+    <path d="M3 11V10.99" stroke-opacity=".01"/>
+    <path d="M3 15V14.99" stroke-opacity=".01"/>
+    <path d="M3 19V18.99" stroke-opacity=".01"/>
+    <path d="M3 23V22.99" stroke-opacity=".01"/>
+    <path d="M3 27V26.99" stroke-opacity=".01"/>
+    <path d="M7 3V2.99" stroke-opacity=".01"/>
+    <path d="M7 27V26.99" stroke-opacity=".01"/>
+    <path d="M11 3V2.99" stroke-opacity=".01"/>
+    <path d="M11 11V10.99" stroke-opacity=".01"/>
+    <path d="M11 15V14.99" stroke-opacity=".01"/>
+    <path d="M11 19V18.99" stroke-opacity=".01"/>
+    <path d="M11 27V26.99" stroke-opacity=".01"/>
+    <path d="M15 3V2.99" stroke-opacity=".01"/>
+    <path d="M15 11V10.99" stroke-opacity=".01"/>
+    <path d="M15 15V14.99" stroke-opacity=".01"/>
+    <path d="M15 19V18.99" stroke-opacity=".01"/>
+    <path d="M15 27V26.99" stroke-opacity=".01"/>
+    <path d="M19 3V2.99" stroke-opacity=".01"/>
+    <path d="M19 11V10.99" stroke-opacity=".01"/>
+    <path d="M19 15V14.99" stroke-opacity=".01"/>
+    <path d="M19 19V18.99" stroke-opacity=".01"/>
+    <path d="M19 27V26.99" stroke-opacity=".01"/>
+    <path d="M23 3V2.99" stroke-opacity=".01"/>
+    <path d="M23 27V26.99" stroke-opacity=".01"/>
+    <path d="M27 3V2.99" stroke-opacity=".01"/>
+    <path d="M27 7V6.99" stroke-opacity=".01"/>
+    <path d="M27 11V10.99" stroke-opacity=".01"/>
+    <path d="M27 15V14.99" stroke-opacity=".01"/>
+    <path d="M27 19V18.99" stroke-opacity=".01"/>
+    <path d="M27 23V22.99" stroke-opacity=".01"/>
+    <path d="M27 27V26.99" stroke-opacity=".01"/>
+  </g>
+</svg>
